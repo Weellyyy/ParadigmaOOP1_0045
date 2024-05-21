@@ -1,20 +1,69 @@
-// Assosication.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <vector>
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+class dokter;
+class pasien {
+public:
+	string nama;
+	vector<dokter*> daftar_dokter;
+	pasien(string pNama) :nama(pNama) {
+		cout << "pasien \"" << nama << "\" ada\n";
+	}
+	~pasien() {
+		cout << "pasien \"" << nama << "\" tidak ada\n";
+	}
+	void tambahdokter(dokter*);
+	void cetakdokter();
+};
+
+class dokter {
+public:
+	string nama;
+	vector<pasien*> daftar_pasien;
+
+	dokter(string pNama) :nama(pNama) {
+		cout << "dokter \"" << nama << "\" ada\n";
+	}
+	~dokter() {
+		cout << "dokter \"" << nama << "\" tidak ada\n";
+	}
+
+	void tambahpasien(pasien*);
+	void cetakpasien();
+
+};
+
+void pasien::tambahdokter(dokter* pDokter) {
+	daftar_dokter.push_back(pDokter);
+}
+void pasien::cetakdokter() {
+	cout << "Daftar Dokter yang menangani pasien \"" << this->nama << "\":\n";
+	for (auto& a : daftar_dokter) {
+		cout << a->nama << "\n";
+	}
+	cout << endl;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+int main() {
+	dokter* varDokter1 = new dokter("dr.Budi");
+	dokter* varDokter2 = new dokter("dr.Tono");
+	pasien* varPasien1 = new pasien("Andi");
+	pasien* varPasien2 = new pasien("lia");
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+	varDokter1->tambahpasien(varPasien1);
+	varDokter1->tambahpasien(varPasien2);
+	varDokter2->tambahpasien(varPasien1);
+
+	varDokter1->cetakpasien();
+	varDokter2->cetakpasien();
+	varPasien1->cetakdokter();
+	varPasien2->cetakdokter();
+
+	delete varPasien1;
+	delete varPasien2;
+	delete varDokter1;
+	delete varDokter2;
+
+	return 0;
+}
